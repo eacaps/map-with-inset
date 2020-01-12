@@ -1,0 +1,23 @@
+{
+  "name": "map-with-inset",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eacaps/map-with-inset.git"
+  },
+  "author": "",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/eacaps/map-with-inset/issues"
+  },
+  "homepage": "https://github.com/eacaps/map-with-inset#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ol": "^6.1.1"
+  }
+}
