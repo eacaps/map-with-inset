@@ -1,33 +1,52 @@
-var map = new ol.Map({
+import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import Tile from 'ol/layer/Tile.js';
+import Vector from 'ol/layer/Vector.js';
+import OSM from 'ol/source/OSM.js';
+import Style from 'ol/style/Style.js';
+import Stroke from 'ol/style/Stroke.js';
+import Fill from 'ol/style/Fill.js';
+import Text from 'ol/style/Text.js';
+import VectorSource from 'ol/source/Vector.js';
+import GeoJSON from 'ol/format/GeoJSON.js';
+
+var map = new Map({
     target: 'map',
     controls: [],
     layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
+      new Tile({
+        source: new OSM()
       })
+        // new ol.layer.Tile({
+        //     source: new ol.source.XYZ({
+        //     url: 'http://a.tile.stamen.com/toner/{z}/{x}/{y}.png'
+        //     })
+        // })
     ],
-    view: new ol.View({
-      center: ol.proj.fromLonLat([37.41, 8.82]),
+    view: new View({
+      projection: 'EPSG:4326',
+      center: [37.41, 8.82],
       zoom: 4
     })
   });
 
-  var minimap = new ol.Map({
+  var minimap = new Map({
       target: 'minimap',
       controls: [],
       layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
+        new Tile({
+          source: new OSM()
         })
       ],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([37.41, 8.82]),
+      view: new View({
+        projection: 'EPSG:4326',
+        center: [37.41, 8.82],
         zoom: 4
       })
   });
 
 //   var vector = new ol.layer.Vector({
-//     source: new ol.source.Vector({
+//     source: new VectorSource({
 //       url: 'data/ssudan.counties.kml',
 //       format: new ol.format.KML()
 //     })
@@ -37,45 +56,54 @@ var map = new ol.Map({
 
 //   vector.setOpacity(.1);
 
-var highlightStyle = new ol.style.Style({
-    stroke: new ol.style.Stroke({
+var highlightStyle = new Style({
+    stroke: new Stroke({
       color: '#f00',
       width: 1
     }),
-    fill: new ol.style.Fill({
+    fill: new Fill({
       color: 'rgba(255,0,0,0.1)'
     }),
-    text: new ol.style.Text({
+    text: new Text({
       font: '12px Calibri,sans-serif',
-      fill: new ol.style.Fill({
+      fill: new Fill({
         color: '#000'
       }),
-      stroke: new ol.style.Stroke({
+      stroke: new Stroke({
         color: '#f00',
         width: 3
       })
     })
   });
 
-  var vector = new ol.layer.Vector({
-    source: new ol.source.Vector({
+  var countries = new Vector({
+    source: new VectorSource({
+      url: 'data/all_countries.json',
+      format: new GeoJSON()
+    })
+  });
+
+//   map.addLayer(countries);
+
+  var vector = new Vector({
+    source: new VectorSource({
       url: 'data/states/eastern_equitoria.json',
-      format: new ol.format.GeoJSON()
+      format: new GeoJSON()
     })
   });
 
   map.addLayer(vector);
 
-  var minivector = new ol.layer.Vector({
-    source: new ol.source.Vector({
+  var minivector = new Vector({
+    source: new VectorSource({
       url: 'data/states/eastern_equitoria.json',
-      format: new ol.format.GeoJSON()
+      format: new GeoJSON()
     })
   });
 
   minimap.addLayer(minivector);
 
-// const geoJsonFormat = new ol.format.GeoJSON();
+// const geoJsonFormat = new GeoJSON();
 
 //   map.on('singleclick', (e) => {
 //     let pixel = e.pixel;
@@ -96,10 +124,10 @@ var highlightStyle = new ol.style.Style({
   ];
 
 for(const county of counties) {
-    const geoJson = new ol.layer.Vector({
-        source: new ol.source.Vector({
+    const geoJson = new Vector({
+        source: new VectorSource({
             url: county,
-            format: new ol.format.GeoJSON()
+            format: new GeoJSON()
         }),
         style: feature => {return highlightStyle;}
     });
@@ -107,3 +135,4 @@ for(const county of counties) {
     map.addLayer(geoJson);
 }
 
+// export default map;
